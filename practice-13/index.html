@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Dashboard</title>
+  <style>
+    body { font-family: sans-serif; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    #graph-container { border: 2px solid blue; margin-top: 20px; }
+  </style>
+</head>
+<body>
+<h1>Live Data</h1>
+<table id="data-table">
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Value</th>
+    <th>Timestamp</th>
+  </tr>
+  </thead>
+  <tbody id="data-table-body">
+  </tbody>
+</table>
+<div id="graph-container"></div>
+<script src="dashboard.js"></script>
+</body>
+</html>

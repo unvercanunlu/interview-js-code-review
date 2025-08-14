@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Product List</title>
+</head>
+<body>
+<h1>Product Catalog</h1>
+
+<form id="filterForm">
+  <label for="category">Category:</label>
+  <select id="category" name="category">
+    <option value="">All</option>
+    <option value="electronics">Electronics</option>
+    <option value="books">Books</option>
+  </select>
+  <button type="submit">Apply Filters</button>
+</form>
+
+<div id="productList"></div>
+<div id="pagination"></div>
+
+<script src="product-list.js"></script>
+</body>
+</html>
