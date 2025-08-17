@@ -213,3 +213,33 @@
 - **Reset State Eksikliği:** Sayaç sıfırlandığında `counter` değişkeni ve arayüz (`UI`) tekrar başlangıç durumuna alınmıyor. Kullanıcı deneyimi açısından `reset state` (sıfırlama durumu) eklenmelidir.
 - **Error UI Eksikliği:** Hata durumlarında yalnızca `console` çıktısı kullanılıyor. Kullanıcıya uygun bir `error message` (hata mesajı) veya durum bildirimi gösterilmelidir.
 - **Single Responsibility Principle (SRP) İhlali:** `startButton` event handler’ı hem `timer logic` (zamanlayıcı mantığı) hem de `UI update` (arayüz güncellemesi) sorumluluğunu taşıyor. Bu ayrılmalı ve farklı fonksiyonlara bölünmelidir.
+
+---
+
+### Practice 10
+
+**Güvenlik ve Validasyon:**
+
+- **Veri Güvenliği:** `feedbackText` değişkeni, kullanıcıdan alınan veriyi içerir ve bu veri kötü amaçlı kodlar (`malicious scripts`) içerebilir. Bu veriyi direkt olarak işlemek, güvenlik riski oluşturur. Gönderilmeden önce `sanitize` (temizlenmeli) edilmelidir. `textContent` kullanılarak HTML içeriği olarak değil, düz metin olarak ele alınması bir önlemdir.
+- **`Null Guard` Eksikliği:** Kodda `feedbackForm` ve `messageDiv` için `null guard` (boş kontrolü) eksik. Eğer bu elementler HTML'de bulunamazsa, kod `document.getElementById`'ın `null` döndürmesi nedeniyle hata (`error`) verebilir. Benzer şekilde, `feedbackText` değişkeninin `null` olup olmadığı da kontrol edilmelidir.
+
+---
+
+**Kullanıcı Deneyimi (UX) ve Hata Yönetimi:**
+
+- **`Alert` Kullanımı:** Form doğrulamasında `alert` kullanmak eski ve kesintili bir kullanıcı deneyimi (`UX`) sunar. Hata mesajları, formun içinde, ilgili alanın yakınında gösterilmelidir.
+- **Yetersiz Hata Geri Bildirimi:** Kod, yalnızca `response.ok` (başarılı yanıt) durumunu kontrol ediyor. 400 (`Bad Request`), 401 (`Unauthorized`), 403 (`Forbidden`), 404 (`Not Found`) gibi spesifik HTTP hataları için detaylı hata mesajları (`error messages`) tanımlanmamıştır. Bu, kullanıcıya neyin yanlış gittiğine dair net bilgi verilmesini engeller.
+- **Gizli Hatalar:** `try-catch` bloğunda yalnızca ağ hataları `console`'a loglanıyor ancak kullanıcıya hiçbir geri bildirim verilmiyor. Bu, kullanıcının bir hatayla karşılaştığından haberdar olamamasına neden olur.
+- **Durum Bildirimi:** Form gönderilmeden önce kullanıcıya geri bildirim gönderildiğine dair bir mesaj gösterilmiyor. Örneğin, "Geri bildiriminiz işleniyor..." gibi bir `loading` (yüklenme) durumu bildirilmelidir. Ayrıca, geri bildirimin geri alınamayacağı veya değiştirilemeyeceği gibi bilgiler de kullanıcıya önceden söylenebilir.
+- **`Finally` Bloğu:** `loading` durumunu, API isteği başarılı olsun veya olmasın, `finally` (son olarak) bloğu içinde kaldırmak iyi bir uygulamadır. Bu blok, işlemin tamamlandığından emin olmanızı sağlar.
+- **Disable Button Eksikliği:** Kullanıcı formu gönderirken "Submit" butonu devre dışı (`disabled`) bırakılmıyor. Bu hem mükerrer istekleri önlemek hem de daha iyi bir `UX` sağlamak için gereklidir.
+- **Form Reset Eksikliği:** Başarılı gönderimden sonra `feedbackForm` sıfırlanmıyor. Kullanıcı deneyimi için formun temizlenmesi gerekir.
+
+---
+
+**Performans ve Kod Kalitesi:**
+
+- **`Throttling` / `Debouncing` Eksikliği:** Kullanıcı, "Submit" butonuna art arda hızlıca tıklayabilir. Bu durum, sunucuya gereksiz ve mükerrer istekler gönderilmesine neden olur. Bunu önlemek için `throttling` (kısma) veya `debouncing` (geciktirme) mekanizmaları kullanılmalıdır.
+- **Asenkron Mekanizmaların Eksikliği:** Çoklu isteklerde `race condition` (yarış koşulu) durumlarını önlemek için `AbortController` (iptal kontrolcüsü) eksik. Ayrıca, `fetch` işleminin zaman aşımı (`timeout`) alması için `setTimeout` ve `clearTimeout` mekanizmaları da eklenmelidir.
+- **Erişilebilirlik (A11y):** HTML elementleri için `a11y` (erişilebilirlik) özellikleri eksik. Özellikle `textarea`'nın bir `label` (etiket) ile ilişkilendirilmesi gerekir. Örneğin, `<label for="feedback">Geri Bildiriminiz</label>` gibi.
+- **Single Responsibility Principle (SRP) İhlali:** `submit` event handler’ı hem `validation` (doğrulama), hem `fetch` (istek), hem de `UI update` (arayüz güncellemesi) işlerini yapıyor. Bu sorumluluklar ayrı fonksiyonlara bölünmelidir.
